@@ -12,8 +12,14 @@ form.addEventListener('submit', e => {
   todoInput.value = ""
 })
 
-todoList.addEventListener('change', setComplete)
-todoList.addEventListener('click', deleteTodo)
+todoList.addEventListener('change', () => {
+  if (!e.target.matches('[data-list-item-checkbox]')) return
+  setComplete()
+})
+todoList.addEventListener('click', () => {
+  if (!e.target.matches('[data-button-delete]')) return
+  deleteTodo()
+})
 // gets form data and returns as an todo object
 function getTodo() {
   return {
@@ -27,8 +33,8 @@ function getTodo() {
 function renderTodo(todo) {
   const templateClone = template.content.cloneNode(true)
   const listItem = templateClone.querySelector('.list-item')
-  const checkbox = templateClone.querySelector('[data-list-item-checkbox]')
-  const  dataText = templateClone.querySelector('[data-list-item-text]')
+  const checkbox = listItem.querySelector('[data-list-item-checkbox]')
+  const  dataText = listItem.querySelector('[data-list-item-text]')
   dataText.innerText = todo.name
   checkbox.checked = todo.complete
   listItem.dataset.todoId = todo.id
@@ -49,7 +55,6 @@ function getTodos() {
 
 // sets the complete property status of the todo when the checkbox is changed
 function setComplete(e) {
-  if (!e.target.matches('[data-list-item-checkbox]')) return
   const checkbox = e.target
   const listItem = checkbox.closest('.list-item')
   const todoId = listItem.dataset.todoId
@@ -64,7 +69,6 @@ function setComplete(e) {
 
 // runs on clicking delete button
 function deleteTodo(e) {
-  if (!e.target.matches('[data-button-delete]')) return
   const deleteBtn = e.target
   const listItem = deleteBtn.parentElement
   // gets the listItem data id that references the todo id
