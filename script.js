@@ -3,6 +3,8 @@ const template = document.querySelector('#list-item-template')
 const todoInput = document.querySelector('#todo-input')
 const todoList = document.querySelector('#list')
 
+loadTodos()
+
 form.addEventListener('submit', e => {
   e.preventDefault()
   if (todoInput.value == "") return
@@ -84,8 +86,6 @@ function deleteTodo(e) {
    // sets the new todos excluding the deleted one
   localStorage.setItem('todo-list', JSON.stringify(todos))
 }
-
-document.addEventListener('DOMContentLoaded', loadTodos)
 
 // render each todo to the screen when the document has loaded
 function loadTodos() {
