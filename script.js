@@ -12,13 +12,13 @@ form.addEventListener('submit', e => {
   todoInput.value = ""
 })
 
-todoList.addEventListener('change', () => {
+todoList.addEventListener('change', (e) => {
   if (!e.target.matches('[data-list-item-checkbox]')) return
-  setComplete()
+  setComplete(e)
 })
-todoList.addEventListener('click', () => {
+todoList.addEventListener('click', (e) => {
   if (!e.target.matches('[data-button-delete]')) return
-  deleteTodo()
+  deleteTodo(e)
 })
 // gets form data and returns as an todo object
 function getTodo() {
