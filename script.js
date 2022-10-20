@@ -2,15 +2,26 @@ const form = document.querySelector("#new-todo-form");
 const template = document.querySelector("#list-item-template");
 const todoInput = document.querySelector("#todo-input");
 const todoList = document.querySelector("#list");
-
+let editFlag;
+let index;
+let SelectedTodo;
 loadTodos();
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (todoInput.value == "") return;
-  const todo = getTodo();
-  renderTodo(todo);
-  saveTodo(todo);
+  if (editFlag) {
+    const todo = {
+      name: todoInput.value,
+      complete: SelectedTodo.querySelector("[data-list-item-checkbox]").checked,
+      id: SelectedTodo.dataset.todoId,
+    };
+    updateTodo(todo);
+  } else {
+    const todo = getTodo();
+    renderTodo(todo);
+    saveTodo(todo);
+  }
   todoInput.value = "";
 });
 
@@ -20,8 +31,7 @@ todoList.addEventListener("change", (e) => {
 });
 todoList.addEventListener("click", (e) => {
   if (e.target.matches("[data-button-delete]")) deleteTodo(e);
-  else if (e.target.matches("[data-button-edit]"))
-  editList()
+  else if (e.target.matches("[data-button-edit]")) editTodo(e);
 });
 // gets form data and returns as an todo object
 function getTodo() {
@@ -50,6 +60,10 @@ function renderTodo(todo) {
 function saveTodo(todo) {
   const todos = getTodos();
   todos.push(todo);
+  saveTodos(todos);
+}
+
+function saveTodos(todos) {
   localStorage.setItem("todo-list", JSON.stringify(todos));
 }
 
@@ -67,7 +81,7 @@ function setComplete(e) {
   todos.forEach((todo, i) => {
     if (todo.id == todoId) {
       todos[i].complete = checkbox.checked;
-      localStorage.setItem("todo-list", JSON.stringify(todos));
+      saveTodos(todos);
     }
   });
 }
@@ -76,10 +90,9 @@ function setComplete(e) {
 function deleteTodo(e) {
   // remove from UI
   const deleteBtn = e.target;
-  const listItem = deleteBtn.parentElement;
+  const listItem = deleteBtn.closest(".list-item");
   listItem.remove();
   // remove from localStorage
-  // gets the listItem data id that references the todo id
   const todoId = listItem.dataset.todoId;
   /*const todos = getTodos().filter(todo => todo.id != todoId)*/
   const todos = getTodos();
@@ -87,17 +100,32 @@ function deleteTodo(e) {
     if (todo.id == todoId) todos.splice(index, 1);
   });
   // sets the new todos excluding the deleted one
-  localStorage.setItem("todo-list", JSON.stringify(todos));
+  saveTodos(todos);
+  todoInput.value = "";
 }
 
-function editList() {
-  todoInput.value = 
+function updateTodo(todo) {
+  // update the UI
+  SelectedTodo.querySelector("[data-list-item-text]").innerText = todo.name;
+  // update the localStorage
+  const todos = getTodos();
+  todos[index] = todo;
+  saveTodos(todos);
 }
 
+function editTodo(e) {
+  const editBtn = e.target;
+  SelectedTodo = editBtn.closest(".list-item");
+  const todoText = SelectedTodo.querySelector(
+    "[data-list-item-text]"
+  ).innerText;
+  todoInput.value = todoText;
+  editFlag = true;
+  // get index
+  const todoId = SelectedTodo.dataset.todoId;
+  index = getTodos().findIndex((todo) => todo.id == todoId);
+}
 // render each todo to the screen when the document has loaded
 function loadTodos() {
-  const todoList = getTodos();
-  todoList.forEach((todo) => {
-    renderTodo(todo);
-  });
+  getTodos().forEach((todo) => renderTodo(todo));
 }

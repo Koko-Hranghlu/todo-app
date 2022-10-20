@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advanced Todo List</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="script.js"></script>
-</head>
-<body>
-  <div class="container border-radius">
-    <form id="new-todo-form">
-      <label for="todo-input">New Todo</label>
-      <input type="text" id="todo-input" class="border-radius">
-      <button type="submit" class="border-radius">Add Todo</button>
-    </form>
-    <ul id="list">
-    </ul>
-  </div>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Todo List</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="container border-radius">
+      <form id="new-todo-form">
+        <label for="todo-input">New Todo</label>
+        <input type="text" id="todo-input" class="border-radius" />
+        <button type="submit" class="border-radius">Add Todo</button>
+      </form>
+      <ul id="list"></ul>
+    </div>
 
-  <template id="list-item-template">
-    <li class="list-item">
-      <label class="list-item-label">
-        <input type="checkbox" data-list-item-checkbox>
-        <span data-list-item-text></span>
-      </label>
-      <button data-button-delete class="border-radius">Delete</button>
-    </li>
-  </template>
-</body>
+    <template id="list-item-template">
+      <li class="list-item">
+        <label class="list-item-label">
+          <input type="checkbox" data-list-item-checkbox />
+          <span data-list-item-text></span>
+        </label>
+        <div class="btns">
+          <button data-button-edit class="fa-solid fa-pen-to-square"></button>
+          <button data-button-delete class="fa-solid fa-trash-can"></button>
+        </div>
+      </li>
+    </template>
+  </body>
 </html>
