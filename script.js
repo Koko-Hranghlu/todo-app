@@ -19,8 +19,9 @@ todoList.addEventListener("change", (e) => {
   setComplete(e);
 });
 todoList.addEventListener("click", (e) => {
-  if (!e.target.matches("[data-button-delete]")) return;
-  deleteTodo(e);
+  if (e.target.matches("[data-button-delete]")) deleteTodo(e);
+  else if (e.target.matches("[data-button-edit]"))
+  editList()
 });
 // gets form data and returns as an todo object
 function getTodo() {
@@ -87,6 +88,10 @@ function deleteTodo(e) {
   });
   // sets the new todos excluding the deleted one
   localStorage.setItem("todo-list", JSON.stringify(todos));
+}
+
+function editList() {
+  todoInput.value = 
 }
 
 // render each todo to the screen when the document has loaded
